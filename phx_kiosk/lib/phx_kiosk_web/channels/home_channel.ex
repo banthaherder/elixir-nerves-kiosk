@@ -1,6 +1,8 @@
 defmodule PhxKioskWeb.HomeChannel do
   use PhxKioskWeb, :channel
 
+  require Logger
+
   def join("home:lobby", payload, socket) do
     if authorized?(payload) do
       {:ok, socket}
@@ -20,6 +22,13 @@ defmodule PhxKioskWeb.HomeChannel do
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
+  end
+
+  def handle_in("brightness", %{"value" => value} = payload, socket) do
+     Logger.debug("Brightness: #{inspect value}")
+     broadcast socket, "brightness", payload
+
+     {:noreply, socket}
   end
 
   # Add authorization logic here as required.
