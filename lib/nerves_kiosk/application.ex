@@ -37,7 +37,7 @@ defmodule NervesKiosk.Application do
     ]
   end
 
-  defp platform_init("host"), do :ok
+  defp platform_init("host"), do: :ok
 
   defp platform_init(_target) do
      # Initialize udev
@@ -48,4 +48,5 @@ defmodule NervesKiosk.Application do
 
      # Work around for a known bug with HTML5 canvas and rpi gpu
      System.put_env("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu")
+  end
 end
