@@ -10,13 +10,15 @@ defmodule NervesKiosk.Application do
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
+
     platform_init(@target)
-    webengine_kiosk_opts = Application.get_all_env(:webengine_kiosk)
+
+    webengine_kiosk_opts =
+      Application.get_all_env(:webengine_kiosk)
 
     children = [
       {WebengineKiosk, {webengine_kiosk_opts, [name: Display]}}
-      | children(@target)
-   ]
+    | children(@target)]
 
     opts = [strategy: :one_for_one, name: NervesKiosk.Supervisor]
     Supervisor.start_link(children, opts)
@@ -40,13 +42,12 @@ defmodule NervesKiosk.Application do
   defp platform_init("host"), do: :ok
 
   defp platform_init(_target) do
-     # Initialize udev
-     :os.cmd('udevd - d')
-     :os.cmd('udevadm trigger --type=subsystems --action=add')
-     :os.cmd('udevadm trigger --type=devices --action=add')
-     :os.cmd('udevadm settle --timeout=30')
-
-     # Work around for a known bug with HTML5 canvas and rpi gpu
-     System.put_env("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu")
+    # Initialize udev
+    :os.cmd('udevd -d')
+    :os.cmd('udevadm trigger --type=subsystems --action=add')
+    :os.cmd('udevadm trigger --type=devices --action=add')
+    :os.cmd('udevadm settle --timeout=30')
+    # Workaround a known bug with HTML5 canvas and rpi gpu
+    System.put_env("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu")
   end
 end
