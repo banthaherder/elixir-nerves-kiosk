@@ -18,7 +18,7 @@ channel.on("brightness", payload => {
 })
 
 brightnessSlider.oninput = function() {
-  channel.push("brightness", {value: parseInt(this.value)})
+  channel.push("brightness", {value: parseInt(this.value)});
   console.log("Brightness:" + this.value);
 }
 
@@ -36,6 +36,26 @@ channel.on("drawLine", payload => {
   ctx.lineTo(to.x, to.y);
   ctx.stroke();
 })
+
+// ------------- Clearing the Canvas ------------- //
+
+// Defines the button element on the page
+var clearButton = document.getElementById("clearButton");
+
+// Push to the channel the clearAll signal
+clearButton.onclick = function() {
+  channel.push("clearAll", {});
+}
+
+// When the clearAll message is received clear the canvas!
+channel.on("clearAll", payload => {
+  clearCanvas();
+})
+
+function clearCanvas() {
+  console.log("cleared");
+  canvas.width = canvas.width;
+}
 
 var lastPoints = {};
 function moveTo(identifier, point) {
@@ -61,6 +81,7 @@ function haltEventBefore(handler) {
     handler(event);
   }
 }
+
 // ----------------
 //  Touch Handling
 // ----------------

@@ -9,3 +9,5 @@
 
 <canvas id="draw-canvas" class="bordered" width="700" height="250">
 </canvas>
+
+<button class="btn" id="clearButton">Clear</button>
